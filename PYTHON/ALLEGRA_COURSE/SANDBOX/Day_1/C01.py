@@ -60,4 +60,32 @@ print "\n\n"
 print "Challenge 03"
 print "============\n"
 
+# Calculate the distance between two points in the 3D space
+# Given two points in the Cartesian space:
+# P1 = (43.64, 30.72, 88.95) P2 = (45.83, 31.11, 92.04)
+# Use Python to calculate their distance
+# Use variables for the parameters
+# Print the distance to the screen
+# The formula for calculating the distance is:
+# d = SQRT((x2 -x1)**2 + (y2 - y1)**2 + (z2 - z1))**2)
 
+x1, y1, z1 = 43.64, 30.72, 88.95
+x2, y2, z2 = 45.83, 31.11, 92.04
+xd, yd, zd = x2 - x1, y2 - y1, z2 - z1
+d = math.sqrt(xd**2 + yd**2 + zd**2)
+
+print "The distance between P1 (", x1, y1, z1,")"
+print "and P2 (", x2, y2, z2,") is ", d, "unspecified units."
+
+print "\n\n"
+
+print "Challenge 04"
+print "============\n"
+
+# Find cysteine bonds in the Insulin structure
+# Data in 2OMH.pdb
+# Lines containing 'SG'
+# x, y, z coordinates
+# Use what you learnt from Task 2
+
+def 
