@@ -3,72 +3,65 @@
 --------------------------------------------
 2018.03.31:
 ===========
-  Quite easy really ... not what I recall from 1978? Must look at that when it comes to the surface
-  Mind you, this is all nonsense as one still does not understand fully Turing completeness etc.
-  Bit like bwa and why it is important
-  What the hell ... filled the space where life should be for a while
+  Quite easy really ... not what I recall from 1978?
+  Must look at that when it comes to the surface
+  Mind you, this is all nonsense as one still does not
+  understand fully Turing completeness etc.
+  Bit like bwa implementation versus why it is important?
+  Or ... explaining brown bear graphs without the reason for
+  their existence wrt velvet and freinds (a lesser crime as
+  this link is relatively transparent)
+  What the hell ... filled the space where life should be
+  for a happily papssed moment of ten
+  Far to many moments actually!!! Should have been able to
+  knock this one out much faster surely!? Not even very pretty code.
 
   Might tidy up sometime? Read problems from files? Data checking!!!
   Hmmm ... but why Dave?
+
   .... bad question! Never has an answer
 
-  Do it in Python?
-  Not a good entrance to C++ methinks
+  Do it in Python? Some things would be very neat I think?
+  Is there not a dictionary, tuple, whatevr here and there?
+  and that bit about finding a char positionin a string would
+  be trivial!
+
+  Pity PYTHON is only for boys and women :-)
+
+  Not a good entrance to C++ methinks,but probably wrong here?
+  Never get around to  C++ dear boy. Stay with the obtainable!
 
 --------------------------------------------
+  Basically:
 
-  Setup up an example tape
-  Setup up an example set of Rules/States
+     Setup up an example tape
+       Define and Wipe
+     Setup up an example set of Rules/States
+       Define and initialise according to notes below
 
-  Do it?
+     Do it?
 
+  Where "Do it" I have in my head and will allow to dribble onto the
+  page in disorder.
+
+  Also must think of the Problem. I start with Add one to a given number.
+  This I bolt into the code in afashion that can be, optionally,
+  overwrittn by other problems from files.
+
+  So, specifically, the "Add One" Rules
+
+  Problems, generally can be a series of rows of 3 integers representing
+  DIRECTION (for Tape Head to move), NEXT_CHAR (to be written to current
+  Tape Head position) and NEXT_STATE (to determine next actions).
+
+  The Rows to be ordered by state and then by Current Tape Character (ranked by position in the allowed alphabet)
 */
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-
-/* Defines I like */
-
-#define TRUE  1
-#define FALSE 0
-
-#define DEBUG TRUE
-
-#define BLANK ' '
-#define SPACE BLANK
-#define TAB   '\t'
-#define EOL   '\n'
-#define nul   '\0'
-
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-
-/* Defines for this program */
-
-#define INFINITE   1000
-#define STARTHEAD  INFINITE/2
-#define EMPTY      '~'
-
-#define MAXSTATES  50
-
-#define ALPHABET   "01~"
-#define SKIP       -1
-#define PROBLEM    "111111111110111111111111111111111111"
-
-#define LEFT       -1
-#define HOLD       0
-#define RIGHT      1
-
-#define HALT       0   // Define mandatory HALT  State as first  State
-#define ERROR      1   // Define mandatory ERROR State as second State
-#define START      2   // Define mandatory START State as third State
-#define RULES      {HALT,HALT,HALT},{HALT,HALT,HALT},{HALT,HALT,HALT},\
-                   {ERROR,ERROR,ERROR},{ERROR,ERROR,ERROR},{ERROR,ERROR,ERROR},\
-                   {RIGHT,SKIP,3},{RIGHT,SKIP,3},{HOLD,SKIP,ERROR},\
-                   {RIGHT,SKIP,3},{RIGHT,SKIP,3},{LEFT,SKIP,4},\
-                   {HOLD,1,5},{LEFT,0,4},{HOLD,1,HALT},\
-                   {LEFT,SKIP,5},{LEFT,SKIP,5},{RIGHT,SKIP,HALT}
+#include "DPJ.h"
+#include "TM.h"
 
 void main()
 {
