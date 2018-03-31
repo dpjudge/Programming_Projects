@@ -1,5 +1,8 @@
 /* Turing Machine Simulation
 
+--------------------------------------------
+2018.03.31:
+===========
   Quite easy really ... not what I recall from 1978? Must look at that when it comes to the surface
   Mind you, this is all nonsense as one still does not understand fully Turing completeness etc.
   Bit like bwa and why it is important
@@ -51,7 +54,7 @@
 
 #define ALPHABET   "01~"
 #define SKIP       -1
-#define PROBLEM    "111111111111111111111111111111111111"
+#define PROBLEM    "111111111110111111111111111111111111"
 
 #define LEFT       -1
 #define HOLD       0
@@ -84,19 +87,10 @@ int  End       = sizeof(Problem) + Start - 1;
                          // Define and initialise End   Tape position of Problem Data
 for ( Head = Start; Head < End; Head++ ) { Tape[Head] = Problem[Head - Start]; 
 
-printf("a %s b %d c %i d\n", Problem, Start, Head);
-
 };
                          // Write Problem Data to Tape
 
-printf("xxx %s yyy\n", Tape);
-
-
 int Rules[][3]={RULES};
-int i,j;
-for (i=0; i<sizeof(Rules)/12; i++) {
-for (j=0; j<3;j++){printf("%d", Rules[i][j]);}};
-printf("\n\ni %d j %d \n\n", i,j);
 
 int State = 1;
 Head = Start;
@@ -125,8 +119,6 @@ Also says:
 
 Maybe I try strcspn sometime, but ... the pointers make me feel good :-)
 
-Did it all with ints in the end, but I keep this reference for a while
-
 */
 
 char *Alphabet     = ALPHABET;
@@ -138,32 +130,23 @@ do {
     char *Current_Char_Address = strchr(Alphabet, Tape[Head]);
     int  Current_Char_Index    = (int)(Current_Char_Address - Alphabet);
     int Rules_Row              = (Current_State * 3) + Current_Char_Index;
-//    Current_Char_Address   = strchr(Alphabet, Tape[Head]);
-//    Current_Char_Index     = (int)(Current_Char_Address - Alphabet);
-//    char Current_Char      = Alphabet[Current_Char_Index];
 
-
-printf("TTT %c %d %d", Tape[Head],Rules_Row,Current_Char_Index  );
-fwrite(&Tape[490], 1, 40, stdout);
-printf(" UUU %d %d %d hhh\n",Current_State, Head, Current_Char_Index );
+fwrite(&Tape[490], 1, 80, stdout); printf("\n");
+for (int i = 0; i < Head - 490; i++){printf(" ");}; printf("^\n");
 
     Current_Char_Index     = Rules[Rules_Row][1];
     if (Current_Char_Index != SKIP) { Tape[Head] = Alphabet[Current_Char_Index];};
-printf("zzz ");
-fwrite(&Tape[490], 1, 40, stdout);
-printf(" www %d %d %d hhh\n",Current_State, Head, Current_Char_Index );
 
     Head = Head + Rules[Rules_Row][0];
 
     Current_State = Rules[Rules_Row][2];
 
-printf("rrr ");
-fwrite(&Tape[490], 1, 40, stdout);
-printf(" sss %d %d %d %d hhh\n",Current_State, Head, Current_Char_Index, HALT );
-
   } while (Current_State > ERROR);
 
-printf("\n\n\nxxx %s yyy\n", Tape);
 
+fwrite(&Tape[490], 1, 80, stdout); printf("\n");
+for (int i = 0; i < Head - 490; i++){printf(" ");}; printf("^\n DONE\n");
+
+printf("\n\n\nxxx %s yyy\n", Tape);
 }
 
