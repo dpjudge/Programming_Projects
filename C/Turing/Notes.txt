@@ -1,0 +1,56 @@
+Here I note things I discovered whilst doing the TM program ...
+and anything else that seems important and that I would forget before
+they become of no consequence
+Which assumes they had consequence in the first place?
+Unlikely .. what!
+Still, where such qualities as "consequence" evades ... one must invent!
+Not to do so leads to confusion, inaction, meander, insanity ...
+I live but to prove my contention
+
+---------------------------------------------------------------------
+2018.03.31: Find the position of a char in a string.
+====================================================
+
+Easy peasy in PYTHON, but tht cheats and hides massive macro behind
+thin gossamer cloaks constructed from the web of the spider!
+
+There must be pain! Obscurity! piddling with pointers!
+
+Well, its a theory.
+
+--- So:
+
+Find the position in the alphabet of the current Tape character
+Dead easy in Python! But we are men! ... sometimes ...
+
+These solutions at:
+https://stackoverflow.com/questions/3217629/how-do-i-find-the-index-of-a-character-within-a-string-in-c
+
+Most opine this as the best solution:
+
+""""""""""""""""""""""""""""""""""
+char *string = "qwerty";
+char *e;
+int index;
+
+e = strchr(string, 'e');
+index = (int)(e - string);
+""""""""""""""""""""""""""""""""""
+I wonder, if it was a very long string, could one assume it was in contiguous memory? Probably not? Maybe the compiler would fix such an issue? Must surely?
+
+Also says:
+"You can also use strcspn(string, "e") but this may be much slower since it's able to handle searching for multiple possible characters. Using strchr and subtracting the pointer is the best way."
+
+Maybe I try strcspn sometime, but ... the pointers make me feel good :-)
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+2018.03.31: Multiple dimension arrays.
+======================================
+I looked into their declaration and intialisation
+Also addressing a 2D array as a 1D array
+I seem to have arrived at some contradictions
+Details forgotten as soon as I got something to work
+Might be good to sort it out some time
+Sure to meet this stuff again ... asssuming I carry on with C a while longer.
+---------------------------------------------------------------------
+

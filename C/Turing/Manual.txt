@@ -1,0 +1,104 @@
+/* Turing Machine Simulation
+
+--------------------------------------------
+2018.03.31:
+===========
+  Quite easy really ... not what I recall from 1978?
+  Must look at that when it comes to the surface
+  Mind you, this is all nonsense as one still does not
+  understand fully Turing completeness etc.
+  Bit like bwa implementation versus why it is important?
+  Or ... explaining brown bear graphs without the reason for
+  their existence wrt velvet and freinds (a lesser crime as
+  this link is relatively transparent)
+  What the hell ... filled the space where life should be
+  for a happily passed moment of ten
+  Far to many moments actually!!! Should have been able to
+  knock this one out much faster surely!? Not even very pretty code.
+
+  Might tidy up sometime? Read problems from files? Data checking!!!
+  Hmmm ... but why Dave?
+
+  .... bad question! Never has an answer
+
+  Do it in Python? Some things would be very neat I think?
+  Is there not a dictionary, tuple, whatever here and there?
+  and that bit about finding a char positionin a string would
+  be trivial!
+
+  Pity PYTHON is only for boys and wimpy women :-)
+
+  Not a good entrance to C++ methinks,but could be wrong here?
+  Never get around to  C++ dear boy. Stay with the obtainable!
+
+--------------------------------------------
+  Basically:
+
+     Setup up an example tape
+       Define and Wipe
+     Setup up an example set of Rules/States
+       Define and initialise according to notes below
+
+     Do it?
+
+  Where "Do it" I have in my head and will allow to dribble onto the
+  page in disorder.
+
+  Also must think of the Problem. I start with "Add One" to a given number.
+  This I bolt into the code in a fashion that can be, optionally,
+  overwritten by other problems read from files.
+
+  So, problems, specifically the "Add One" Rules:
+
+  First an alphabet presented as a string.
+  The last char will always be '~', used to represented wiped Tape cells.
+
+  For Example ("Add One"):
+
+                             "01~"
+
+  Then a number of ordered STATES
+  The first 3 STATES are mandatory. Further STATES depend on the problem
+  For example ("Add One"):
+
+  State 0: ERROR ... ends execution with a rude       message
+  State 1: HALT  ... ends execution with a triumphant message
+  State 2: START ... sets the intial conditions for th problem
+           In this example:
+
+           Purpose - to check Tape head is in a feasible position.
+           The tape head can start anywhere in the number to be incremented.
+
+           If the initial Tape cell is Clean/Empty/Wiped ...
+                       Do nothing but move to the ERROR STATE
+           If a '0' or '1' is read then write nothing,
+                                        move up the Tape,
+                                        move to SLIDE STATE.
+
+
+
+
+  Problems, generally can be a series of rows of 3 integers representing
+  DIRECTION (for Tape Head to move), NEXT_CHAR (to be written to current
+  Tape Head position) and NEXT_STATE (to determine next actions).
+
+  The Rows to be ordered by state and then by Current Tape Character
+  (ranked by position in the allowed alphabet). The Add One Example:
+
+      STATE   CHAR   ||  DIRECTION     NEXT_CHAR      NEXT_STATE
+      ==========================================================
+      ERROR    ~     ||  HOLD          SKIP           -
+      ERROR    0     ||  HOLD          SKIP           -
+      ERROR    1     ||  HOLD          SKIP           -
+      HALT     ~     ||  HOLD          SKIP           -
+      HALT     0     ||  HOLD          SKIP           -
+      HALT     1     ||  HOLD          SKIP           -
+      START    ~     ||  HOLD          SKIP           ERROR
+      START    0     ||  RIGHT         SKIP           -
+      START    1     ||  RIGHT         SKIP           -
+
+
+
+
+*/
+
