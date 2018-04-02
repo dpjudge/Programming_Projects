@@ -8,7 +8,7 @@
 
 #define ALPHABET   "01~"
 #define SKIP       -1
-#define PROBLEM    "111111111110111111111111111111111111"
+#define PROBLEM    "0000000000000000000000000000000000"
 
 #define LEFT       -1
 #define HOLD       0
