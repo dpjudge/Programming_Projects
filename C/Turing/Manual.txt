@@ -1,15 +1,16 @@
 /* Turing Machine Simulation
 
 --------------------------------------------
-2018.03.31:
-===========
+2018.03.31: - initially
+=======================
+--------------------------------------------
   Quite easy really ... not what I recall from 1978?
   Must look at that when it comes to the surface
   Mind you, this is all nonsense as one still does not
   understand fully Turing completeness etc.
   Bit like bwa implementation versus why it is important?
   Or ... explaining brown bear graphs without the reason for
-  their existence wrt velvet and freinds (a lesser crime as
+  their existence wrt velvet and friends (a lesser crime as
   this link is relatively transparent)
   What the hell ... filled the space where life should be
   for a happily passed moment or ten
@@ -30,22 +31,25 @@
 
   Not a good entrance to C++ methinks,but could be wrong here?
   Never get around to  C++ dear boy. Stay with the obtainable!
+--------------------------------------------
 
 --------------------------------------------
-  Basically:
-
   The engine:
   ***********
 
-     Setup up an example tape
+  Basically:
+
+     Set up up an example tape
        Define and Wipe
-     Setup up an example set of Rules/States
+     Set up up an example set of Rules/States
        Define and initialise according to notes below
 
      Do it?
 
   Where "Do it" I have in my head and will allow to dribble onto the
   page in disorder.
+
+--------------------------------------------
 
   Format of a problem:
   ********************
@@ -71,7 +75,7 @@
 
   State 1: HALT  ... ends execution with a triumphant message
 
-  State 2: START ... sets the intial conditions for the problem
+  State 2: START ... sets the initial conditions for the problem
 
            In this example:
 
@@ -80,38 +84,44 @@
            problem data (number to be incremented in this case).
 
            If the initial Tape cell is Clean/Empty/Wiped
-           ... or not in the allowed alphabet
                        Do nothing but move to the ERROR STATE
 
-           END OF MANDATORY FEATURES - problem specific from here on *********
+           I suppose problems might exist where starting on a wiped Tape cell
+           is legal? But I ignore this for now.
+           It would be a trivial "mandatory feature" to side step anyway.
+
+********** END OF MANDATORY FEATURES - problem specific from here on *********
 
            If a legal character ('0' or '1' in this case) is read then write nothing,
-                              move up the Tape,
+                              move up the Tape (RIGHT),
                               move to SLIDE STATE (first fully problem specific STATE).
 
 State 3: SLIDE ... Moves to the last character of the initial problem data
            Method - move forward (RIGHT) until first wiped tape cell,
            then move back (LEFT) one step.
 
-           Remain in SLIDE STATE until objective acheived, then move to ADD STATE.
+           Remain in SLIDE STATE until objective achieved, then move to ADD STATE.
 
 State 3: ADD   ... Increment the initial binary number by MOVING back down (LEFT)
            the number changing all 1s to 0s, remaining in STATE ADD
 
            If a 0 is read, change it to a 1 and move to BACK STATE.
-           Incementation has been acheived.
+           Incrementation has been achieved.
 
            If a wiped cell is encountered, the initial number must have been all 1s.
            Write a 1, extending the number one char to the left and increasing its
-           value by 1. Incementation has been acheived.
+           value by 1. Incrementation has been achieved.
            Move to HALT STATE as Tape Head is in the required end position.
            That is, the first char of the incremented number.
 
+State 4: BACK  ... Job done, but need to position the Tape Head over the first char
+           of the solution. Why?. Because I bloody say so!
 
+           If the current char is 0 or 1, move back (LEFT), write nothing (SKIP),
+           remain in BACK STATE.
 
-
-
-
+           If the current current Tape cell is wiped, you have overshot, so
+           move forward (RIGHT), write nothing (SKIP), move to HALT STATE, job done.
 
   Problems, generally can be a series of rows of 3 integers representing
   DIRECTION (for Tape Head to move), NEXT_CHAR (to be written to current
@@ -134,9 +144,27 @@ State 3: ADD   ... Increment the initial binary number by MOVING back down (LEFT
       ADD      ~     ||  HOLD          1              HALT
       ADD      0     ||  LEFT          1              BACK
       ADD      1     ||  LEFT          0              ADD
+      BACK     ~     ||  RIGHT         SKIP           HALT
+      BACK     0     ||  LEFT          SKIP           BACK
+      BACK     1     ||  LEFT          SKIP           BACK
 
+Any time illegal character (not included in the current Alphabet) encountered
+is considered an error. This is not really a Turing machine issue. It is simply
+a malformed problem definition. So, not included in the problem definition, or
+dealt with by moving to the ERROR STATE. Just a simple data checking conditional.
 
+In fact, never comfortable with the ERROR STATE? It too is only needed to detect
+a malformed problem. However, one needs to react to a condition that can occur,
+theoretically, in the START state for which there exists no logical action?
 
+What the hell, this is just supposed to be a bit of fun, not a chase along
+gossamer spider threads that float through the summer sunlight!
 
-*/
+Which causes one to wonder what gossamer means? Well well well! "a fine, filmy
+substance consisting of cobwebs spun by small spiders, seen especially in autumn".
+By the Lord Harry ... am I good or what? The term can be used more generally to
+refer to anything with the properties of ... what it says ... and is also a jolly
+nice word!
 
+However ... it occurs that "gossamer spider threads", in the light of the above, becomes tautological! Better better just "gossamer threads" or maybe even just "gossamer"!. Indeed dear comrade, please read "gossamer that floats through the
+late summer sunlight". Must use that somewhere? Corny? But pretty.

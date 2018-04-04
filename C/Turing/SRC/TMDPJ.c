@@ -6,14 +6,47 @@ See  Notes.txt for ... Notes.
 */
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdint.h>    // Not needed currently, but maybe if I try strcspn
                        // to find chars in Alphabet (see Notes.txt).
 #include <string.h>
 #include "DPJ.h"
 #include "TM.h"
 
-void main()
+void main( int argc, char *argv[] )
 {
+switch ( argc ) {
+  case 1 :
+    printf("No Problem file - Continueing with default Problem");
+    break; 
+  case 2 :
+    if ( access(argv[1], F_OK ) ) {         // access returns 0 (FALSE) on success??
+                                            // vaguely valid reasons, but ... still bizarre!
+      char Prefix[500];
+      strcpy(Prefix,"Cannot find " );
+      strcat( strcat( Prefix, argv[1] ), " : " );
+      Error( WARNING, Prefix, NOFILE, "Continueing with default Problem" );
+      break;
+    }  
+    if ( access(argv[1], R_OK ) ) {         // access returns 0 (FALSE) on success??
+                                            // vaguely valid reasons, but ... still bizarre!
+      char Prefix[500];
+      strcpy(Prefix,"Cannot read " );
+      strcat( strcat( Prefix, argv[1] ), " : " );
+      Error( WARNING, Prefix, NOREAD, "Continueing with default Problem" );
+      break;
+    }
+    int c;
+    FILE *file;
+    file = fopen(argv[1], "r");
+    if (file) {
+      while ((c = getc(file)) != EOF) putchar(c);
+    fclose(file);
+    }
+    break;
+  default :
+         printf("Invalid grade\n" );
+  }
 
 int Head;                // Define Tape Head position variable
 
@@ -39,6 +72,12 @@ char *Alphabet     = ALPHABET;
 
 Head               = Start;
 int  Current_State = 2;
+
+// If it exists, read problem from file
+
+
+
+// If it exists, read problem from file
 
 do {
     char *Current_Char_Address = strchr(Alphabet, Tape[Head]);

@@ -1,0 +1,17 @@
+# DATA
+
+--data     "001010001111101010001111111"
+
+# DATA START
+
+--data_start
+
+# INITIAL TAPE HEAD POSITION
+
+--head_init
+
+# ALPHABET
+
+--alphabet "01~"
+
+

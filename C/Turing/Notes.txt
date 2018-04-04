@@ -11,8 +11,8 @@ I live but to prove my contention
 2018.03.31: Find the position of a char in a string.
 ====================================================
 
-Easy peasy in PYTHON, but tht cheats and hides massive macro behind
-thin gossamer cloaks constructed from the web of the spider!
+Easy peasy in PYTHON, but PYTHON cheats and hides massive macros behind
+glittery gossamer clouds!
 
 There must be pain! Obscurity! piddling with pointers!
 
@@ -46,11 +46,11 @@ Maybe I try strcspn sometime, but ... the pointers make me feel good :-)
 ---------------------------------------------------------------------
 2018.03.31: Multiple dimension arrays.
 ======================================
-I looked into their declaration and intialisation
+I looked into their declaration and initialisation
 Also addressing a 2D array as a 1D array
 I seem to have arrived at some contradictions
 Details forgotten as soon as I got something to work
 Might be good to sort it out some time
-Sure to meet this stuff again ... asssuming I carry on with C a while longer.
+Sure to meet this stuff again ... assuming I carry on with C a while longer.
 ---------------------------------------------------------------------
 
