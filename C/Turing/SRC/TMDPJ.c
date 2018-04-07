@@ -1,105 +1,103 @@
 /* Turing Machine Simulation
-
 See Manual.txt for Description
 See  Notes.txt for ... Notes.
-
 */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdint.h>    // Not needed currently, but maybe if I try strcspn
-                       // to find chars in Alphabet (see Notes.txt).
-#include <string.h>
 #include "DPJ.h"
 #include "TM.h"
 
 void main( int argc, char *argv[] )
 {
-switch ( argc ) {
-  case 1 :
-    printf("No Problem file - Continueing with default Problem");
-    break; 
-  case 2 :
-    if ( access(argv[1], F_OK ) ) {         // access returns 0 (FALSE) on success??
-                                            // vaguely valid reasons, but ... still bizarre!
-      char Prefix[500];
-      strcpy(Prefix,"Cannot find " );
-      strcat( strcat( Prefix, argv[1] ), " : " );
+// ***********************************************************************************************
+// Define Problem elements and initialise with default values.
+// ***********************************************************************************************
+  int  Infinite               = INFINITE;    // Define and initialise Infinity
+  int  Head;                                 // Define Tape Head position variable
+  int  Start                  = STARTPROBLEM;// Define and initialise Start Tape position of Problem Data
+  char   Problem_Data[]       = PROBLEMDATA; // Define and initialise Problem Data
+  char  *Problem_Data_ptr     = Problem_Data;
+  char **Problem_Data_ptr_ptr = &Problem_Data_ptr;
+  int  Rules[][3]             = {RULES};
+
+// ***********************************************************************************************
+// There is either 1 arguement or 0 arguements.
+// The only allowed arguement is a file defining a whole problem or adapting the default solution.
+// ***********************************************************************************************
+
+  if ( argc == 1 ) Error( WARNING, "No Problem file suggested : ",     // No Problem file!
+                          NOARGS, "Continueing with default Problem" );// Complain and continue.
+  else {
+    if ( argc > 2 ) Error( WARNING, "Only 1 arguement expected : ",    // More than 1 arg?
+                           EXCESSARG,                                  // accept first
+                           "First arguement assumed to be Problem file" ); // ignore the rest.
+// ***********************************************************************************************
+// Test for non-existence or unreadable Problem file.
+// If found, complain and continue with default.
+// ***********************************************************************************************
+    if ( access(argv[1], F_OK ) ) {      // access returns 0 (FALSE) on success??
+      char Prefix[500];                  // vaguely valid reasons, but ... still bizarre!
+      strcpy(Prefix,"Cannot find " ); strcat( strcat( Prefix, argv[1] ), " : " );
       Error( WARNING, Prefix, NOFILE, "Continueing with default Problem" );
-      break;
     }  
-    if ( access(argv[1], R_OK ) ) {         // access returns 0 (FALSE) on success??
-                                            // vaguely valid reasons, but ... still bizarre!
-      char Prefix[500];
-      strcpy(Prefix,"Cannot read " );
-      strcat( strcat( Prefix, argv[1] ), " : " );
+    else if ( access(argv[1], R_OK ) ) { // access returns 0 (FALSE) on success??
+      char Prefix[500];                  // vaguely valid reasons, but ... still bizarre!
+      strcpy(Prefix,"Cannot read " ); strcat( strcat( Prefix, argv[1] ), " : " );
       Error( WARNING, Prefix, NOREAD, "Continueing with default Problem" );
-      break;
     }
-    int c;
-    FILE *file;
-    file = fopen(argv[1], "r");
-    if (file) {
-      while ((c = getc(file)) != EOF) putchar(c);
-    fclose(file);
+// ***********************************************************************************************
+// If good Program file, read it and overwrite default settings as required.
+// ***********************************************************************************************
+    else {
+      int  **Rules_ptr        = (int  **)&Rules[0][0];
+      Read_Problem_File(argv[1], &Infinite, Problem_Data_ptr_ptr, Rules_ptr);
     }
-    break;
-  default :
-         printf("Invalid grade\n" );
+
   }
 
-int Head;                // Define Tape Head position variable
+// ***********************************************************************************************
+// Prepare Problem elements and Infinite Tape.
+// ***********************************************************************************************
 
-int Infinite = INFINITE; // Define and initialise Infinity
-char Tape[INFINITE];     // Create Infinite tape
-for ( Head = 0; Head < INFINITE; Head++ ) { Tape[Head] = EMPTY; };
-                         // Wipe infinite tape
+  char Tape[Infinite];                             // Create Infinite tape
+  for ( Head = 0; Head < Infinite; Head++ ) Tape[Head] = EMPTY;
+                                                   // Wipe infinite tape
 
-char Problem[] = PROBLEM;// Define and initialise Problem Data
-int  Start     = STARTHEAD;
-                         // Define and initialise Start Tape position of Problem Data
-int  End       = sizeof(Problem) + Start - 1;
-                         // Define and initialise End   Tape position of Problem Data
-for ( Head = Start; Head < End; Head++ ) { Tape[Head] = Problem[Head - Start]; };
-                         // Write Problem Data to Tape
+  int  End           = strlen(Problem_Data_ptr) + Start - 1;
+                           // Define and initialise End Tape position of Problem Data
+  for ( Head = Start; Head < End; Head++ ) Tape[Head] = Problem_Data_ptr[Head - Start];
+                           // Write Problem Data to Tape
 
-int Rules[][3]={RULES};
+  Head               = Start;
 
-int State = 1;
-Head = Start;
+  char *Alphabet     = ALPHABET;
 
-char *Alphabet     = ALPHABET;
+  int  Current_State = START;
 
-Head               = Start;
-int  Current_State = 2;
+// ***********************************************************************************************
+// Run the Turing Machine on the defined problem.
+// ***********************************************************************************************
 
-// If it exists, read problem from file
-
-
-
-// If it exists, read problem from file
-
-do {
+  do {
     char *Current_Char_Address = strchr(Alphabet, Tape[Head]);
     int  Current_Char_Index    = (int)(Current_Char_Address - Alphabet);
-    int Rules_Row              = (Current_State * 3) + Current_Char_Index;
+    int  Rules_Row             = (Current_State * 3) + Current_Char_Index;
 
-fwrite(&Tape[490], 1, 80, stdout); printf("\n");
-for (int i = 0; i < Head - 490; i++){printf(" ");}; printf("^\n");
+    fwrite(&Tape[490], 1, 80, stdout); printf("\n");
+    for (int i = 0; i < Head - 490; i++ ) printf(" ");
+    printf( "^\n" );
 
     Current_Char_Index     = Rules[Rules_Row][1];
-    if (Current_Char_Index != SKIP) { Tape[Head] = Alphabet[Current_Char_Index];};
+    if (Current_Char_Index != SKIP) Tape[Head] = Alphabet[Current_Char_Index];
 
     Head = Head + Rules[Rules_Row][0];
 
     Current_State = Rules[Rules_Row][2];
 
-  } while (Current_State > ERROR);
+  } while ( Current_State > ERROR );
 
+  fwrite(&Tape[490], 1, 80, stdout); printf("\n");
+  for (int i = 0; i < Head - 490; i++ ) printf(" ");
+  printf( "^\n DONE\n" );
 
-fwrite(&Tape[490], 1, 80, stdout); printf("\n");
-for (int i = 0; i < Head - 490; i++){printf(" ");}; printf("^\n DONE\n");
-
-printf("\n\n\nxxx %s yyy\n", Tape);
 }
 

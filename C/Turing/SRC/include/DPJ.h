@@ -1,32 +1,50 @@
+/* Basic includes  */
+
+#include <stdio.h>
 #include <stdlib.h>
 
 /* Defines I like */
 
-#define TRUE  1
-#define FALSE 0
+#define TRUE     1
+#define FALSE    0
 
-#define DEBUG TRUE
+#define STRMATCH 0     // str(n)cmp(a,b) returns -x, 0, +x for a>b, a=b, a<b. Novel, but ...
 
-#define BLANK ' '
-#define SPACE BLANK
-#define TAB   '\t'
-#define EOL   '\n'
-#define nul   '\0'
+#define DEBUG    TRUE
+
+#define BLANK    ' '
+#define SPACE    BLANK
+#define TAB      '\t'
+#define EOL      '\n'
+#define nul      '\0'
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
-#define EXCESSARG 0
-#define NOFILE    1
-#define NOREAD    2
+// ***********************************************************************************************
+// Dealing with ERROR/WARNING messages.
+// Probably should go to stderr?
+// ***********************************************************************************************
 
+#define MAXLENERROR 256
+
+#define NOARGS        0
+#define EXCESSARG     1
+#define NOFILE        2
+#define NOREAD        3
+#define BADARG        4
+#define UNKARG        5
+
+char Error_prefix[MAXLENERROR];
 char *ERROR_MESSAGES[] = {
+       "Arguements Expected",
        "Too many arguments",
        "File does not exist",
        "No read access to file",
-       "3333333333",
-       "4444444444",
+       "Illegal arguement prefix",
+       "Unknown arguement",
        "5555555555" };
+char Error_suffix[MAXLENERROR];
 
 #define WARNING 0
 #define ERROR   1

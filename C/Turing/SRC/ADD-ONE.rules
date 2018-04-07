@@ -1,6 +1,10 @@
+#INFINITY - GOOD ARG WITH SPACES
+
+--                infinite        2000
+
 # DATA
 
---data     "001010001111101010001111111"
+--data     00101000111110101000111111100000000000000111111111111111111111111111
 
 # DATA START
 
@@ -14,4 +18,18 @@
 
 --alphabet "01~"
 
+--rules        {HALT,HALT,HALT},{HALT,HALT,HALT},{HALT,HALT,HALT},\
+#               {ERROR,ERROR,ERROR},{ERROR,ERROR,ERROR},{ERROR,ERROR,ERROR},\
+#               {RIGHT,SKIP,3},{RIGHT,SKIP,3},{HOLD,SKIP,ERROR},\
+#               {RIGHT,SKIP,3},{RIGHT,SKIP,3},{LEFT,SKIP,4},\
+#               {HOLD,1,5},{LEFT,0,4},{HOLD,1,HALT},\
+#               {LEFT,SKIP,5},{LEFT,SKIP,5},{RIGHT,SKIP,HALT}
+
+# UNKARG
+
+--rubbish
+
+# UNKARG with spaces
+
+--      more_rubbish
 
