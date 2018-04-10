@@ -6,50 +6,74 @@ See  Notes.txt for ... Notes.
 #include "DPJ.h"
 #include "TM.h"
 
-void main( int argc, char *argv[] )
+int main( int argc, char *argv[] )
 {
+
 // ***********************************************************************************************
 // Define Problem elements and initialise with default values.
 // ***********************************************************************************************
-  int  Infinite               = INFINITE;    // Define and initialise Infinity
-  int  Head;                                 // Define Tape Head position variable
-  int  Start                  = STARTPROBLEM;// Define and initialise Start Tape position of Problem Data
-  char   Problem_Data[]       = PROBLEMDATA; // Define and initialise Problem Data
-  char  *Problem_Data_ptr     = Problem_Data;
-  char **Problem_Data_ptr_ptr = &Problem_Data_ptr;
-  int  Rules[][3]             = {RULES};
+
+  int  infinite               = INFINITE;          // Define and initialise Infinity
+  int  head;                                       // Define Tape head position variable
+  int  start_head             = STARTHEAD;
+
+
+  char  Problem_Data[]        = PROBLEMDATA;       // Define and initialise Problem Data
+  char *Problem_Data_ptr      = Problem_Data;      //
+  int  start_data             = STARTPROBLEM;      // Define and initialise Start Tape position of Problem Data
+  int  free_Problem_Data      = FALSE;             //
+
+  char  Alphabet[]            = ALPHABET;          //
+  char *Alphabet_ptr          = Alphabet;          //
+  int  alphabet_size          = strlen(Alphabet);  //
+  int  free_alphabet          = FALSE;             //
+
+  int  state_count            = STATECOUNT;        //
+  int  rules_size             = alphabet_size      //
+                                 * state_count * 3;//
+  int   Rules[]               = {RULES};           //
+  int  *Rules_ptr             = Rules;             //
+  int  free_Rules             = FALSE;             //
 
 // ***********************************************************************************************
 // There is either 1 arguement or 0 arguements.
 // The only allowed arguement is a file defining a whole problem or adapting the default solution.
 // ***********************************************************************************************
 
-  if ( argc == 1 ) Error( WARNING, "No Problem file suggested : ",     // No Problem file!
-                          NOARGS, "Continueing with default Problem" );// Complain and continue.
+  if ( argc == 1 ) Error( WARNING, "No Problem file suggested : ",        // No Problem file!
+                          NOARGS,  "Continueing with default Problem" );  // Complain and continue.
   else {
-    if ( argc > 2 ) Error( WARNING, "Only 1 arguement expected : ",    // More than 1 arg?
-                           EXCESSARG,                                  // accept first
-                           "First arguement assumed to be Problem file" ); // ignore the rest.
+    if ( argc > 2 ) Error( WARNING, "Only 1 arguement expected : ",       // More than 1 arg?
+                           EXCESSARG,                                     // accept first
+                           "First arguement assumed to be Problem file" );// ignore the rest.
+
 // ***********************************************************************************************
 // Test for non-existence or unreadable Problem file.
 // If found, complain and continue with default.
 // ***********************************************************************************************
+
     if ( access(argv[1], F_OK ) ) {      // access returns 0 (FALSE) on success??
-      char Prefix[500];                  // vaguely valid reasons, but ... still bizarre!
+      char Prefix[500];                       // vaguely valid reasons, but ... still bizarre!
       strcpy(Prefix,"Cannot find " ); strcat( strcat( Prefix, argv[1] ), " : " );
       Error( WARNING, Prefix, NOFILE, "Continueing with default Problem" );
-    }  
-    else if ( access(argv[1], R_OK ) ) { // access returns 0 (FALSE) on success??
-      char Prefix[500];                  // vaguely valid reasons, but ... still bizarre!
+    }
+
+    else if ( access(argv[1], R_OK ) ) {      // access returns 0 (FALSE) on success??
+      char Prefix[500];                       // vaguely valid reasons, but ... still bizarre!
       strcpy(Prefix,"Cannot read " ); strcat( strcat( Prefix, argv[1] ), " : " );
       Error( WARNING, Prefix, NOREAD, "Continueing with default Problem" );
     }
+
 // ***********************************************************************************************
 // If good Program file, read it and overwrite default settings as required.
 // ***********************************************************************************************
+
     else {
-      int  **Rules_ptr        = (int  **)&Rules[0][0];
-      Read_Problem_File(argv[1], &Infinite, Problem_Data_ptr_ptr, Rules_ptr);
+      Read_Problem_File(argv[1], &infinite, &start_head,
+                                 &Problem_Data_ptr, &start_data, &free_Problem_Data,
+                                 &Alphabet_ptr, &alphabet_size, &free_alphabet,
+                                 &state_count, &rules_size, &Rules_ptr, &free_Rules);
+
     }
 
   }
@@ -58,18 +82,16 @@ void main( int argc, char *argv[] )
 // Prepare Problem elements and Infinite Tape.
 // ***********************************************************************************************
 
-  char Tape[Infinite];                             // Create Infinite tape
-  for ( Head = 0; Head < Infinite; Head++ ) Tape[Head] = EMPTY;
+  char Tape[infinite];                             // Create Infinite tape
+  for ( head = 0; head < infinite; head++ ) Tape[head] = EMPTY;
                                                    // Wipe infinite tape
 
-  int  End           = strlen(Problem_Data_ptr) + Start - 1;
+  int  end_data      = strlen(Problem_Data_ptr) + start_data - 1;
                            // Define and initialise End Tape position of Problem Data
-  for ( Head = Start; Head < End; Head++ ) Tape[Head] = Problem_Data_ptr[Head - Start];
+  for ( head = start_data; head < end_data; head++ ) Tape[head] = Problem_Data_ptr[head - start_data];
                            // Write Problem Data to Tape
 
-  Head               = Start;
-
-  char *Alphabet     = ALPHABET;
+  head               = start_head;
 
   int  Current_State = START;
 
@@ -78,26 +100,30 @@ void main( int argc, char *argv[] )
 // ***********************************************************************************************
 
   do {
-    char *Current_Char_Address = strchr(Alphabet, Tape[Head]);
+    char *Current_Char_Address = strchr(Alphabet, Tape[head]);
     int  Current_Char_Index    = (int)(Current_Char_Address - Alphabet);
-    int  Rules_Row             = (Current_State * 3) + Current_Char_Index;
+    int  Rules_Row             = ((Current_State * alphabet_size) + Current_Char_Index) * 3;
 
     fwrite(&Tape[490], 1, 80, stdout); printf("\n");
-    for (int i = 0; i < Head - 490; i++ ) printf(" ");
+    for (int i = 0; i < head - 490; i++ ) printf(" ");
     printf( "^\n" );
 
-    Current_Char_Index     = Rules[Rules_Row][1];
-    if (Current_Char_Index != SKIP) Tape[Head] = Alphabet[Current_Char_Index];
+    Current_Char_Index     = Rules_ptr[Rules_Row + 1];
+    if (Current_Char_Index != SKIP) Tape[head] = Alphabet[Current_Char_Index];
 
-    Head = Head + Rules[Rules_Row][0];
+    head = head + Rules_ptr[Rules_Row + 0];
 
-    Current_State = Rules[Rules_Row][2];
+    Current_State = Rules_ptr[Rules_Row + 2];
 
   } while ( Current_State > ERROR );
 
   fwrite(&Tape[490], 1, 80, stdout); printf("\n");
-  for (int i = 0; i < Head - 490; i++ ) printf(" ");
-  printf( "^\n DONE\n" );
+  for (int i = 0; i < head - 490; i++ ) printf(" ");
+  if (free_Problem_Data) free(Problem_Data_ptr);
+  if (free_Rules)        free(Rules_ptr);
 
+  printf( "^\n DONE - %s\n", (Current_State == HALT) ? "Sucessfully" : "Error State" );
+
+  return Current_State;
 }
 
